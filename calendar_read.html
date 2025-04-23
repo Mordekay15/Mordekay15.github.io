@@ -138,11 +138,29 @@
       color: #6c5ce7;
       font-weight: bold;
     }
+
+    .habit-navigation {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .habit-navigation a {
+      text-decoration: none;
+      color: #6c5ce7;
+      font-size: 1.5rem;
+    }
   </style>
 </head>
 <body>
   <div class="container">
-    <div class="habit-icon">📖</div>
+    <div class="habit-navigation">
+      <a href="previous.html" class="nav-arrow">&#8592;</a>
+      <div class="habit-icon">
+        <img src="https://img.icons8.com/ios/50/read.png" alt="Reading">
+      </div>
+      <a href="next.html" class="nav-arrow">&#8594;</a>
+    </div>
     <div class="habit-title">Reading</div>
 
     <div class="calendar-card">
@@ -167,6 +185,7 @@
   <script>
     const selectedDateEl = document.getElementById('selected-date');
     const calendarGrid = document.getElementById('calendar-grid');
+    let selectedDay = 17; // Default selected day
     const today = new Date(2025, 7, 1); // August 2025
     const daysInMonth = 31;
     const offset = new Date(2025, 7, 1).getDay(); // Get weekday (0-Sun to 6-Sat)
@@ -182,11 +201,12 @@
         const day = document.createElement('div');
         day.innerText = i;
 
-        if (i === 17) day.classList.add("selected"); // Default selected
+        if (i === selectedDay) day.classList.add("selected"); // Default selected
 
         day.onclick = () => {
           document.querySelectorAll(".calendar-grid div").forEach(el => el.classList.remove("selected"));
           day.classList.add("selected");
+          selectedDay = i; // Save selected day
           const date = new Date(2025, 7, i);
           selectedDateEl.textContent = date.toDateString();
         };
