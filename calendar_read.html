@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Habit Calendar</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calendar</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
     * {
@@ -23,89 +23,62 @@
     .container {
       width: 100%;
       max-width: 400px;
-      background-color: #ffffff;
+      padding: 20px 16px 100px;
+      background-color: white;
       border: 4px solid #dcd1e8;
       border-radius: 24px;
-      padding: 16px 16px 100px;
       position: relative;
     }
 
-    .habit-icon {
+    #calendar {
+      background-color: #f0e6f8;
+      border-radius: 20px;
+      padding: 16px;
+    }
+
+    #calendar-header {
+      background-color: #6c5ce7;
+      color: white;
+      text-align: center;
+      padding: 12px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      border-radius: 12px;
+      margin-bottom: 16px;
+    }
+
+    #day-holder {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 8px;
+    }
+
+    .day-card {
+      background-color: white;
+      border: 1px solid #d3cbd9;
+      border-radius: 12px;
+      min-height: 56px;
+      padding: 4px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      margin-bottom: 24px;
-    }
-
-    .icon-box {
-      width: 72px;
-      height: 72px;
-      background-color: #efe6f6;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 8px;
-    }
-
-    .icon-box img {
-      width: 36px;
-      height: 36px;
-    }
-
-    .habit-label {
-      font-size: 1rem;
-      color: #444;
-      font-weight: 500;
-    }
-
-    .calendar-section {
-      background-color: #f0e6f5;
-      border-radius: 20px;
-      padding: 16px;
-      margin-bottom: 24px;
-    }
-
-    .calendar-section h3 {
-      font-size: 0.95rem;
-      font-weight: 500;
-      color: #555;
-      margin-bottom: 12px;
-    }
-
-    input[type="date"] {
-      font-family: 'Inter', sans-serif;
-      padding: 12px;
-      border-radius: 12px;
-      border: none;
-      background-color: white;
-      font-size: 1rem;
+      font-size: 0.85rem;
       color: #333;
+    }
+
+    .badge-holder {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2px;
       width: 100%;
+      margin-top: 4px;
     }
 
-    .calendar-buttons {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 16px;
-    }
-
-    .calendar-buttons button {
-      padding: 10px 20px;
-      font-size: 0.9rem;
-      border-radius: 12px;
-      border: none;
-      cursor: pointer;
-    }
-
-    .btn-cancel {
-      background-color: transparent;
-      color: #6c5ce7;
-    }
-
-    .btn-ok {
-      background-color: #6c5ce7;
-      color: white;
+    .badge-holder img {
+      width: 100%;
+      aspect-ratio: 1/1;
+      object-fit: cover;
+      border-radius: 6px;
     }
 
     .nav {
@@ -126,6 +99,7 @@
       text-align: center;
       font-size: 0.85rem;
       color: #555;
+      text-decoration: none;
     }
 
     .nav-item.active {
@@ -136,28 +110,65 @@
 </head>
 <body>
   <div class="container">
-    <div class="habit-icon">
-      <div class="icon-box">
-        <img src="https://img.icons8.com/ios/50/open-book--v1.png" alt="Reading Icon"/>
-      </div>
-      <div class="habit-label">Reading</div>
-    </div>
-
-    <div class="calendar-section">
-      <h3>Select date</h3>
-      <input type="date" id="date-picker" value="2025-08-17"/>
-
-      <div class="calendar-buttons">
-        <button class="btn-cancel">Cancel</button>
-        <button class="btn-ok">OK</button>
-      </div>
+    <div id="calendar">
+      <h2 id="calendar-header">August 2025</h2>
+      <div id="day-holder"></div>
     </div>
 
     <div class="nav">
       <a href="welcome.html" class="nav-item">Home</a>
       <a href="progress.html" class="nav-item">Checkpoint</a>
-      <a href="calendar_read.html" class="nav-item active">Calendar</a>
+      <a href="#" class="nav-item active">Calendar</a>
     </div>
   </div>
+
+  <script>
+    const day_holder = document.getElementById("day-holder");
+
+    const month_length = 31;
+    const offset = 4; // e.g. Thursday = 4
+    const habits = {
+      1: ["https://img.icons8.com/ios/50/open-book--v1.png"],
+      5: ["https://img.icons8.com/ios/50/dumbbell.png", "https://img.icons8.com/ios/50/water.png"],
+      10: ["https://img.icons8.com/ios/50/open-book--v1.png"],
+      17: ["https://img.icons8.com/ios/50/meditation.png"],
+    };
+
+    function add_offset(count) {
+      for (let i = 0; i < count; i++) {
+        const empty = document.createElement("div");
+        empty.className = "day-card";
+        day_holder.appendChild(empty);
+      }
+    }
+
+    function add_daycard(day) {
+      const card = document.createElement("div");
+      card.className = "day-card";
+
+      const day_text = document.createElement("div");
+      day_text.innerText = day;
+      card.appendChild(day_text);
+
+      const badge_holder = document.createElement("div");
+      badge_holder.className = "badge-holder";
+
+      if (habits[day]) {
+        habits[day].forEach(src => {
+          const img = document.createElement("img");
+          img.src = src;
+          badge_holder.appendChild(img);
+        });
+      }
+
+      card.appendChild(badge_holder);
+      day_holder.appendChild(card);
+    }
+
+    add_offset(offset);
+    for (let i = 1; i <= month_length; i++) {
+      add_daycard(i);
+    }
+  </script>
 </body>
 </html>
