@@ -73,6 +73,7 @@
 
     .btn {
       margin-top: 25px;
+      margin-bottom: 10px;
       background-color: #6c5ce7;
       color: white;
       padding: 14px;
@@ -81,6 +82,8 @@
       font-weight: bold;
       cursor: pointer;
       user-select: none;
+      display: block;
+      text-decoration: none;
     }
 
     @media (max-width: 500px) {
@@ -97,19 +100,18 @@
 <body>
   <div class="container">
     <div class="image-wrapper">
-
       <img src="Group.png" alt="Yoga Illustration" />
     </div>
     <h2>Create your account</h2>
-    <div class="input"><input type="text" placeholder="afsar" /></div>
-    <div class="input"><input type="email" placeholder="Jhondeo@gmail.com" /></div>
-    <div class="input"><input type="password" placeholder="••••••••" /></div>
-    <!-- <div class="privacy"> -->
-      <!-- i have read the <a href="#">Privacy Policy</a> -->
-    <!-- </div> -->
-  <div>
-    <a href="welcome.html" class="btn">GET STARTED</a>
-</div>
+    <div class="input"><input type="text" placeholder="Enter the name" /></div>
+    <div class="input"><input type="email" placeholder="example@gmail.com" /></div>
+    <div class="input"><input type="password" placeholder="password" /></div>
+    <div class="privacy">
+      I have read the <a href="#">Privacy Policy</a>
+    </div> 
+    <div>
+      <a href="welcome.html" class="btn">GET STARTED</a>
+    </div>
   </div>
 </body>
 </html>
