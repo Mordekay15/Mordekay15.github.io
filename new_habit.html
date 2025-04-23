@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Add Habit</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 400px;
+      width: 100%;
+      padding: 20px 16px 100px;
+      border: 4px solid #d3cbd9;
+      border-radius: 24px;
+      position: relative;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    label {
+      font-size: 0.9rem;
+      color: #444;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    input[type="text"], textarea {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      border: none;
+      background-color: #f4f4f8;
+      margin-bottom: 16px;
+      font-size: 1rem;
+    }
+
+    .buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .buttons button {
+      flex: 1 1 45%;
+      padding: 10px;
+      border: none;
+      border-radius: 20px;
+      background-color: #6c5ce7;
+      color: white;
+      font-weight: 500;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+
+    .icon-input {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background-color: #f4f4f8;
+      padding: 12px;
+      border-radius: 10px;
+      margin-bottom: 24px;
+    }
+
+    .icon-input span {
+      flex-grow: 1;
+      color: #888;
+    }
+
+    .icon-input button {
+      border: none;
+      background: none;
+      font-size: 1.2rem;
+      color: #888;
+      cursor: pointer;
+    }
+
+    .submit-button {
+      width: 100%;
+      padding: 14px;
+      background-color: #6c5ce7;
+      color: white;
+      border: none;
+      border-radius: 20px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .nav {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      border-top: 1px solid #eee;
+      background: #f7f2f9;
+      display: flex;
+      justify-content: space-around;
+      padding: 12px 0;
+      border-bottom-left-radius: 20px;
+      border-bottom-right-radius: 20px;
+    }
+
+    .nav-item {
+      text-align: center;
+      font-size: 0.85rem;
+      color: #555;
+    }
+
+    .nav-item.active {
+      color: #6c5ce7;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Add a new habit</h2>
+
+    <label for="habit-name">Enter the name:</label>
+    <input type="text" id="habit-name" placeholder="Habit name">
+
+    <label>Regularity of repetition</label>
+    <div class="buttons">
+      <button>Every day</button>
+      <button>Once in a week</button>
+      <button>2 times in a week</button>
+      <button>3 times in a week</button>
+    </div>
+
+    <label for="habit-description">Add description</label>
+    <textarea id="habit-description" rows="4" placeholder="Description..."></textarea>
+
+    <div class="icon-input">
+      <span>Add the icon</span>
+      <button>+</button>
+    </div>
+
+    <button class="submit-button">Add habit</button>
+
+    <div class="nav">
+      <a href="welcome.html" class="nav-item">Home</a>
+      <a href="progress.html" class="nav-item">Checkpoint</a>
+      <a href="#" class="nav-item">Calendar</a>
+    </div>
+  </div>
+</body>
+</html>
