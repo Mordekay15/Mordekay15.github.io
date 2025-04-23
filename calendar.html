@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #calendar {
+            background-color: aquamarine;
+            border-radius: 12px;
+        }
+        #calendar-header {
+            background-color: blue;
+            color:aliceblue;
+            justify-self: center;
+        }
+        #day-holder {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+        }
+        .day-card {
+            background-color: aqua;
+            justify-items: center;
+            border-radius: 12px;
+            border: 1px solid blueviolet;
+        }
+        .badge-holder {
+            background-color: blue;
+            display:grid;
+            grid-template-columns: repeat(2,1fr);
+            border-radius: 12px;
+        }
+        img {
+            aspect-ratio: 1/1;
+            width: 100%;
+            object-fit: cover;
+            border-radius: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div id="calendar">
+        <h2 id="calendar-header">Month - Year</h2>
+        <div id="day-holder"></div>
+    </div>
+
+    <script>
+        /*
+        load previous activities in a hashmap
+        prev_activities ={
+                            May-2025: {
+                                1:[habit1,habit3], 
+                                5:[habit2]
+                            },
+                            
+                            April-2025: {
+                                3:[habit1]
+                            }
+                        }
+        */
+       
+        // you can store the habits and corresponding images in a hashmap
+
+        const calendar = document.getElementById("calendar");
+        const calendar_header = document.getElementById("calendar-header");
+        const day_holder = document.getElementById("day-holder");
+        
+        //check the length of the given month and set it here
+        var month_length = 31;
+        //if the month doesnt start with monday then add empty card
+        //monday:0 tuesday:1 ....
+        var offset = 3;
+
+        function add_offset(offset){
+            for (let i = 0; i < offset; i++) {
+                const new_daycard = document.createElement("div");
+                new_daycard.className= "day-card";
+                day_holder.appendChild(new_daycard);
+            }
+        }
+        
+
+        function add_daycard(x){
+            const new_daycard = document.createElement("div");
+            new_daycard.className = "day-card";
+            
+            const day_txt = document.createElement("p");
+            day_txt.innerText = x;
+            
+            const badge_holder = document.createElement("div");
+            badge_holder.className="badge-holder";
+
+            /*
+            check it there is any habit for the given day
+            append an image to the badge_holder
+            */
+
+            new_daycard.appendChild(day_txt);
+            new_daycard.appendChild(badge_holder)
+            day_holder.appendChild(new_daycard);
+        }
+        
+
+        add_offset(offset);        
+        for (let i = 1; i <= month_length; i++) {
+            add_daycard(i);
+        }
+    </script>
+</body>
+</html>
