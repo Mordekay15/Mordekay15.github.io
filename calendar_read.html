@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Calendar</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Habit Detail</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
     * {
@@ -16,69 +16,101 @@
       background-color: #f9f7fb;
       display: flex;
       justify-content: center;
-      align-items: flex-start;
       min-height: 100vh;
     }
 
     .container {
-      width: 100%;
       max-width: 400px;
-      padding: 20px 16px 100px;
+      width: 100%;
+      padding: 24px 16px 100px;
       background-color: white;
       border: 4px solid #dcd1e8;
       border-radius: 24px;
       position: relative;
     }
 
-    #calendar {
-      background-color: #f0e6f8;
-      border-radius: 20px;
-      padding: 16px;
-    }
-
-    #calendar-header {
-      background-color: #6c5ce7;
-      color: white;
-      text-align: center;
-      padding: 12px;
-      font-size: 1.1rem;
-      font-weight: 600;
-      border-radius: 12px;
-      margin-bottom: 16px;
-    }
-
-    #day-holder {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 8px;
-    }
-
-    .day-card {
-      background-color: white;
-      border: 1px solid #d3cbd9;
-      border-radius: 12px;
-      min-height: 56px;
-      padding: 4px;
+    .habit-icon {
       display: flex;
-      flex-direction: column;
+      justify-content: center;
       align-items: center;
-      font-size: 0.85rem;
+      background-color: #f3edf7;
+      border-radius: 20px;
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .habit-title {
+      text-align: center;
+      font-weight: 500;
+      font-size: 1rem;
+      margin-bottom: 20px;
       color: #333;
     }
 
-    .badge-holder {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 2px;
-      width: 100%;
-      margin-top: 4px;
+    .calendar-card {
+      background-color: #f2e9f8;
+      padding: 16px;
+      border-radius: 20px;
     }
 
-    .badge-holder img {
-      width: 100%;
-      aspect-ratio: 1/1;
-      object-fit: cover;
-      border-radius: 6px;
+    .calendar-header {
+      font-size: 0.9rem;
+      color: #555;
+      margin-bottom: 6px;
+    }
+
+    .selected-date {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-bottom: 16px;
+      color: #4b3d73;
+    }
+
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 8px;
+      font-size: 0.9rem;
+      color: #444;
+    }
+
+    .calendar-grid div {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .calendar-grid div:hover {
+      background-color: #e1d7f4;
+    }
+
+    .calendar-grid .selected {
+      background-color: #6c5ce7;
+      color: white;
+    }
+
+    .calendar-footer {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 16px;
+    }
+
+    .calendar-footer button {
+      background: none;
+      border: none;
+      font-weight: bold;
+      font-size: 0.95rem;
+      color: #6c5ce7;
+      cursor: pointer;
     }
 
     .nav {
@@ -110,9 +142,19 @@
 </head>
 <body>
   <div class="container">
-    <div id="calendar">
-      <h2 id="calendar-header">August 2025</h2>
-      <div id="day-holder"></div>
+    <div class="habit-icon">📖</div>
+    <div class="habit-title">Reading</div>
+
+    <div class="calendar-card">
+      <div class="calendar-header">Select date</div>
+      <div class="selected-date" id="selected-date">Mon, Aug 17</div>
+
+      <div class="calendar-grid" id="calendar-grid"></div>
+
+      <div class="calendar-footer">
+        <button onclick="cancel()">Cancel</button>
+        <button onclick="confirm()">OK</button>
+      </div>
     </div>
 
     <div class="nav">
@@ -123,52 +165,45 @@
   </div>
 
   <script>
-    const day_holder = document.getElementById("day-holder");
+    const selectedDateEl = document.getElementById('selected-date');
+    const calendarGrid = document.getElementById('calendar-grid');
+    const today = new Date(2025, 7, 1); // August 2025
+    const daysInMonth = 31;
+    const offset = new Date(2025, 7, 1).getDay(); // Get weekday (0-Sun to 6-Sat)
 
-    const month_length = 31;
-    const offset = 4; // e.g. Thursday = 4
-    const habits = {
-      1: ["https://img.icons8.com/ios/50/open-book--v1.png"],
-      5: ["https://img.icons8.com/ios/50/dumbbell.png", "https://img.icons8.com/ios/50/water.png"],
-      10: ["https://img.icons8.com/ios/50/open-book--v1.png"],
-      17: ["https://img.icons8.com/ios/50/meditation.png"],
-    };
+    function renderCalendar() {
+      // Offset
+      for (let i = 0; i < offset; i++) {
+        const empty = document.createElement('div');
+        calendarGrid.appendChild(empty);
+      }
 
-    function add_offset(count) {
-      for (let i = 0; i < count; i++) {
-        const empty = document.createElement("div");
-        empty.className = "day-card";
-        day_holder.appendChild(empty);
+      for (let i = 1; i <= daysInMonth; i++) {
+        const day = document.createElement('div');
+        day.innerText = i;
+
+        if (i === 17) day.classList.add("selected"); // Default selected
+
+        day.onclick = () => {
+          document.querySelectorAll(".calendar-grid div").forEach(el => el.classList.remove("selected"));
+          day.classList.add("selected");
+          const date = new Date(2025, 7, i);
+          selectedDateEl.textContent = date.toDateString();
+        };
+
+        calendarGrid.appendChild(day);
       }
     }
 
-    function add_daycard(day) {
-      const card = document.createElement("div");
-      card.className = "day-card";
-
-      const day_text = document.createElement("div");
-      day_text.innerText = day;
-      card.appendChild(day_text);
-
-      const badge_holder = document.createElement("div");
-      badge_holder.className = "badge-holder";
-
-      if (habits[day]) {
-        habits[day].forEach(src => {
-          const img = document.createElement("img");
-          img.src = src;
-          badge_holder.appendChild(img);
-        });
-      }
-
-      card.appendChild(badge_holder);
-      day_holder.appendChild(card);
+    function cancel() {
+      alert("Canceled");
     }
 
-    add_offset(offset);
-    for (let i = 1; i <= month_length; i++) {
-      add_daycard(i);
+    function confirm() {
+      alert("Date confirmed: " + selectedDateEl.textContent);
     }
+
+    renderCalendar();
   </script>
 </body>
 </html>
