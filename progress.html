@@ -48,6 +48,7 @@
       padding: 14px 18px;
       border-radius: 20px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      transition: opacity 0.3s;
     }
 
     .habit-left {
@@ -66,20 +67,32 @@
       color: #333;
     }
 
-    .checkmark {
+    .checkbox {
+      appearance: none;
+      -webkit-appearance: none;
       width: 22px;
       height: 22px;
+      border: 2px solid #6c5ce7;
       border-radius: 4px;
-      background-color: #6c5ce7;
       display: flex;
       align-items: center;
       justify-content: center;
+      cursor: pointer;
+      background-color: transparent;
     }
 
-    .checkmark::before {
+    .checkbox:checked {
+      background-color: #6c5ce7;
+    }
+
+    .checkbox:checked::before {
       content: "✔";
       color: white;
       font-size: 14px;
+    }
+
+    .habit-item.checked {
+      opacity: 0.6;
     }
 
     .nav {
@@ -126,7 +139,7 @@
           <img src="https://img.icons8.com/ios/50/running.png" alt="Jogging">
           <span class="habit-text">Jogging</span>
         </div>
-        <div class="checkmark"></div>
+        <input type="checkbox" class="checkbox" />
       </div>
 
       <div class="habit-item">
@@ -134,7 +147,7 @@
           <img src="https://img.icons8.com/ios/50/read.png" alt="Reading">
           <span class="habit-text">Reading</span>
         </div>
-        <div class="checkmark"></div>
+        <input type="checkbox" class="checkbox" />
       </div>
 
       <div class="habit-item">
@@ -142,7 +155,7 @@
           <img src="https://img.icons8.com/ios/50/dumbbell.png" alt="Gym">
           <span class="habit-text">Gym</span>
         </div>
-        <div class="checkmark"></div>
+        <input type="checkbox" class="checkbox" />
       </div>
 
       <div class="habit-item">
@@ -150,7 +163,7 @@
           <img src="https://img.icons8.com/ios/50/shower.png" alt="Cold Shower">
           <span class="habit-text">Cold shower</span>
         </div>
-        <div class="checkmark"></div>
+        <input type="checkbox" class="checkbox" />
       </div>
     </div>
 
@@ -160,5 +173,27 @@
       <a href="calendar_read.html" class="nav-item">Calendar</a>
     </div>
   </div>
+
+  <script>
+    document.querySelectorAll('.checkbox').forEach((checkbox, index) => {
+      const habitItem = checkbox.closest('.habit-item');
+      const saved = localStorage.getItem('habit-' + index);
+
+      if (saved === 'checked') {
+        checkbox.checked = true;
+        habitItem.classList.add('checked');
+      }
+
+      checkbox.addEventListener('change', () => {
+        if (checkbox.checked) {
+          habitItem.classList.add('checked');
+          localStorage.setItem('habit-' + index, 'checked');
+        } else {
+          habitItem.classList.remove('checked');
+          localStorage.removeItem('habit-' + index);
+        }
+      });
+    });
+  </script>
 </body>
 </html>
