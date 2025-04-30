@@ -98,6 +98,10 @@
       color: white;
     }
 
+    .calendar-grid .marked {
+      border: 2px solid #6c5ce7;
+    }
+
     .calendar-footer {
       display: flex;
       justify-content: space-between;
@@ -155,20 +159,18 @@
 <body>
   <div class="container">
     <div class="habit-navigation">
-      <a href="calendar_read.html" class="nav-arrow">&#8592;</a>
+      <a href="calendar_gym.html" class="nav-arrow">&#8592;</a>
       <div class="habit-icon">
         <img src="https://img.icons8.com/ios/50/shower.png" alt="Cold Shower">
       </div>
-      <a href="calendar_jogging.html" class="nav-arrow">&#8594;</a>
+      <a href="calendar_read.html" class="nav-arrow">&#8594;</a>
     </div>
-    <div class="habit-title">Cold shower</div>
+    <div class="habit-title">Cold Shower</div>
 
     <div class="calendar-card">
       <div class="calendar-header">Select date</div>
       <div class="selected-date" id="selected-date">Mon, Aug 17</div>
-
       <div class="calendar-grid" id="calendar-grid"></div>
-
       <div class="calendar-footer">
         <button onclick="cancel()">Cancel</button>
         <button onclick="confirm()">OK</button>
@@ -185,13 +187,16 @@
   <script>
     const selectedDateEl = document.getElementById('selected-date');
     const calendarGrid = document.getElementById('calendar-grid');
-    let selectedDay = 17; // Default selected day
+    const storageKey = 'markedDates_cold_shower';
+    let selectedDay = 17;
     const today = new Date(2025, 7, 1); // August 2025
     const daysInMonth = 31;
-    const offset = new Date(2025, 7, 1).getDay(); // Get weekday (0-Sun to 6-Sat)
+    const offset = new Date(2025, 7, 1).getDay();
+
+    let markedDates = JSON.parse(localStorage.getItem(storageKey)) || [];
 
     function renderCalendar() {
-      // Offset
+      calendarGrid.innerHTML = '';
       for (let i = 0; i < offset; i++) {
         const empty = document.createElement('div');
         calendarGrid.appendChild(empty);
@@ -200,13 +205,13 @@
       for (let i = 1; i <= daysInMonth; i++) {
         const day = document.createElement('div');
         day.innerText = i;
-
-        if (i === selectedDay) day.classList.add("selected"); // Default selected
+        if (i === selectedDay) day.classList.add("selected");
+        if (markedDates.includes(i)) day.classList.add("marked");
 
         day.onclick = () => {
           document.querySelectorAll(".calendar-grid div").forEach(el => el.classList.remove("selected"));
           day.classList.add("selected");
-          selectedDay = i; // Save selected day
+          selectedDay = i;
           const date = new Date(2025, 7, i);
           selectedDateEl.textContent = date.toDateString();
         };
@@ -215,12 +220,18 @@
       }
     }
 
-    function cancel() {
-      alert("Canceled");
+    function confirm() {
+      if (!markedDates.includes(selectedDay)) {
+        markedDates.push(selectedDay);
+        localStorage.setItem(storageKey, JSON.stringify(markedDates));
+        renderCalendar();
+      }
     }
 
-    function confirm() {
-      alert("Date confirmed: " + selectedDateEl.textContent);
+    function cancel() {
+      markedDates = markedDates.filter(day => day !== selectedDay);
+      localStorage.setItem(storageKey, JSON.stringify(markedDates));
+      renderCalendar();
     }
 
     renderCalendar();
